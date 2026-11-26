@@ -1,35 +1,50 @@
 import streamlit as st
 from groq import Groq
+from streamlit.errors import StreamlitSecretNotFoundError
 
-st.set_page_config(page_title="AI INTERVIEW ASISSTANT", layout="centered")
-st.caption('practice interviews with AI-generated questions and constructive feedback.')
-st.caption('Pavitra')
-st.write("Department of AI&DS")
+st.set_page_config(
+    page_title="AI Interview Assistant",
+    layout="centered"
+)
+
+st.title("AI Interview Assistant")
+
+st.caption(
+    "Practice interviews with AI-generated questions and constructive feedback."
+)
+
+st.caption("Launched by: ISHWARIYA S ")
+st.write("Department of AI & DS")
 
 try:
-  client = Groq(api_key=st.secrets['GROQ_API_KEY'])
-  st.write("API connection sucessful")
-  
-except(KeyError,FileNotFoundError):
-  st.error('GROQ_API_KEY is missing.Add it to streamlit cloud -->App setting')
-  st.stop()
-  
-  role=st.selection("Select Job Role",[
-      "Python Developer",
-      "Java Developer",
-      "Data Analyst",
-      "Machine Learning Engineer",
-      "Software Engineer",
-      "HR Executive"])    
-  
-if st.button("Generate interview questions"):
-  
-  prompt = "generate 5 inte Grorview questions for the role of" + role
+    api_key = st.secrets["GROQ_API_KEY"]
 
-  response = client.chat.completions.create(
-      model="openai/gpt-oss-120b", messages=[
+    client = Groq(api_key=api_key)
+
+    st.success("API connection successful!")
+
+except (KeyError, FileNotFoundError, StreamlitSecretNotFoundError):
+    st.error(
+        "GROQ_API_KEY is missing. "
+        "Add it to your Streamlit secrets."
+    )
+    st.stop()
+
+role = st.selectbox("Select Job Role",[
+                    "Python Developer",
+                    "Java Developer",
+                    "Data Analyst",
+                    "Machine Learning Engineer",
+                    "Software Engineer",
+                    "HR Executive"
+                    ])
+if st.button("Generate Interview Questions"):
+    prompt="Generate 5 Interview questions for the role of " + role
+    response = client.chat.completions.create(
+    model="openai/gpt-oss-120b",
+    messages=[
     {"role":"user","content":prompt}
     ]
-)
-output = response.choices[0].message.content
-st.write(output)
+    )
+    output = response.choices[0].message.content
+    st.write(output)
