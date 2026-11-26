@@ -13,7 +13,7 @@ st.caption(
     "Practice interviews with AI-generated questions and constructive feedback."
 )
 
-st.caption("Launched by: ISHWARIYA S ")
+st.caption("Launched by: PAVITRA AIKUR ")
 st.write("Department of AI & DS")
 
 try:
